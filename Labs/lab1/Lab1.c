@@ -1,0 +1,73 @@
+#define _POSIX_C_SOURCE 200809L
+#include <stdio.h>
+#include <string.h>
+#include <stdlib.h>
+
+
+
+int main()
+{
+
+	char *buff = NULL;
+	size_t size = 0;
+		
+	printf("Enter your sentence\n");
+
+	ssize_t num_char = getline(&buff, &size, stdin);
+	if (num_char == -1) {
+		perror("getline failed");
+		exit(EXIT_FAILURE);
+	}
+
+	char *saveptr;
+	char *ret = strtok_r(buff, " \t\n", &saveptr);
+	if (*ret == -1) {
+		perror("strtok_r failed");
+		exit(EXIT_FAILURE);
+	}	
+	while (ret != NULL){
+		printf("%s\n", ret);
+		
+		ret = strtok_r(NULL," \t\n", &saveptr);
+	}
+
+	free(buff);
+	return 0;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
