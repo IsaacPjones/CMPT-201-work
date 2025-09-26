@@ -1,0 +1,56 @@
+#define _POSIX_C_SOURCE 200809L
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+#define HISTORY 5
+
+static void print_history(char *history[], int count, int next_index) {
+    if (count == 0) return;
+    int start = (next_index - count + HISTORY) % HISTORY; // oldest
+    for (int i = 0; i < count; i++) {
+        char *s = history[(start + i) % HISTORY];
+        if (s) puts(s);
+    }
+}
+
+int main(void) {
+    char *line = NULL;
+    size_t cap = 0;
+    ssize_t len;
+
+    char *history[HISTORY] = {0}; // circular buffer storage
+    int count = 0;                // how many valid items currently stored (0..HISTORY)
+    int next = 0;                 // index where next item will be written
+
+    for (;;) {
+        printf("Enter input: ");
+        fflush(stdout);
+
+        len = getline(&line, &cap, stdin);
+        if (len == -1) break; // EOF or error -> exit
+
+        // strip trailing '\n' if present (keeps blank lines as empty strings)
+        if (len > 0 && line[len - 1] == '\n') {
+            line[--len] = '\0';
+        }
+
+        // store into circular buffer (keep only last HISTORY lines)
+        free(history[next]);                // free overwritten slot if used
+        history[next] = strdup(line);       // copy current input
+        if (!history[next]) { perror("strdup"); break; }
+        next = (next + 1) % HISTORY;
+        if (count < HISTORY) count++;
+
+        // if the command is "print", dump the last up-to-5 lines (includes this "print")
+        if (strcmp(line, "print") == 0) {
+            print_history(history, count, next);
+        }
+    }
+
+    // cleanup
+    free(line);
+    for (int i = 0; i < HISTORY; i++) free(history[i]);
+    return 0;
+}
+
