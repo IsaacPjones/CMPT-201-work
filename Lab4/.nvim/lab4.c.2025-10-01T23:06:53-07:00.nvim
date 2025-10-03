@@ -1,0 +1,22 @@
+#include <stdio.h>
+#include <stdint.h>
+#include <unistd.h>
+
+struct header {
+  uint64_t size;
+  struct header* next;
+};
+
+void increase_heap_size(&spot) {
+
+
+}
+
+
+int main() {
+  increase_heap_size(EXTRA_SIZE);
+  initialize_block(first_block_pointer);
+  initialize_block(second_block_pointer);
+
+
+}
