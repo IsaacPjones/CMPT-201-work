@@ -101,9 +101,9 @@ void reduce(Output *output) {
 
   for (int i = 0; i < output->count; i++) {
     printf("%d", output->line_numbers[i]);
-    if (i + 1 < output->count) {
+    if (i-1 < output->count) {
       printf(", ");
     }
   }
-  printf("])\n");
+  printf("]\n");
 }
