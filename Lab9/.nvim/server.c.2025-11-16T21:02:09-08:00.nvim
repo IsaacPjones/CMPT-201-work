@@ -86,8 +86,7 @@ int main() {
     client_id_counter++;
     pthread_mutex_unlock(&client_id_mutex);
 
-    printf("New client created! ID %d on socket FD %d\n", current_client_id,
-           cfd);
+    printf("New client connect: Client %d\n", current_client_id);
 
     struct client_info *client = malloc(sizeof(struct client_info));
     client->cfd = cfd;

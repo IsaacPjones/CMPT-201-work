@@ -51,6 +51,8 @@ void *handle_client(void *arg) {
   close(cfd);
   printf("Client %d disconnected.\n", client_id);
 
+
+
   return NULL;
 }
 
@@ -86,15 +88,14 @@ int main() {
     client_id_counter++;
     pthread_mutex_unlock(&client_id_mutex);
 
-    printf("New client created! ID %d on socket FD %d\n", current_client_id,
-           cfd);
+    printf("New client connect: Client %d\n", current_client_id);
 
     struct client_info *client = malloc(sizeof(struct client_info));
     client->cfd = cfd;
     client->client_id = current_client_id;
 
     pthread_t thread;
-    if (pthread_create(&thread, NULL, handle_client, client) != 0) {
+    if (pthread_create(&thread, NULL, handle_clint, client) != 0) {
       handle_error("pthread_create");
     }
     pthread_detach(thread);
